@@ -14,7 +14,5 @@ main = do
     min_e <-randInt
     (private, public, modulus) <- return (generateKeys min_p min_q min_e)
     
-    handle <- openFile "id_rsa" ReadWriteMode
-    contents <- "hello"
-    writeFile "id_rsa" content
-    hClose handle
+    writeFile "id_rsa" (show private ++ "\n" ++ show modulus)
+    writeFile "id_rsa.pub" (show public ++ "\n" ++ show modulus)
