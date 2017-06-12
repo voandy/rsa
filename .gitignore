@@ -1,0 +1,5 @@
+generate-keys
+id_rsa
+id_rsa.pub
+*.hi
+*.o
