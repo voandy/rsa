@@ -41,7 +41,7 @@ coPrime e phi = if euclidGCD e phi == 1 then e else coPrime (nextPrime (e + 1)) 
 -- takes 3 seed values and returns a public/private key pair and their modulus
 generateKeys :: (Integral a) => a -> a -> a -> (a, a, a)
 generateKeys min_p min_q min_e = (d, e, n)
-    where p = nextPrime min_p
+    where p = nextPrime min_p 
           q = nextPrime min_q
           phi = (p - 1) * (q - 1)
           n = p * q
