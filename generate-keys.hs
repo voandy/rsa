@@ -1,6 +1,4 @@
 import RSA
-import System.IO
-import Data.Char
 import System.Random
 
 -- generates random integer between 10^11 and 10^12

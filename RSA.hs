@@ -1,7 +1,9 @@
 module RSA
 ( generateKeys
-, coPrime
+, modExp
 ) where
+
+import Data.Bits
 
 -- naive primality test by trial division
 isPrime :: (Integral a) => a -> Bool
@@ -48,4 +50,15 @@ generateKeys min_p min_q min_e = (d, e, n)
           e = coPrime (nextPrime min_e) phi
           d = modInv e phi
 
--- strConvert :: (Integral a) => String -> [a]
+-- This is prohibitively slow with larger number as Haskell tries to evaluate
+-- b ^ e before calculating the remainder. We need to use a more efficient
+-- method of modular exponentiation.
+encrypt :: (Integral a) => a -> a -> a -> a
+encrypt msg key n = (mod (msg^key) n)
+
+-- encrypts/decrypts message b using public/private key e and modulus m
+-- https://gist.github.com/trevordixon/6788535
+modExp :: Integer -> Integer -> Integer -> Integer
+modExp b 0 m = 1
+modExp b e m = t * modExp ((b * b) `mod` m) (shiftR e 1) m `mod` m
+           where t = if testBit e 0 then b `mod` m else 1
