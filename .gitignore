@@ -1,5 +1,7 @@
 generate-keys
 id_rsa
 id_rsa.pub
+decrypt
+encrypt
 *.hi
 *.o

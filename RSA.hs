@@ -42,19 +42,19 @@ coPrime e phi = if euclidGCD e phi == 1 then e else coPrime (nextPrime (e + 1)) 
 
 -- takes 3 seed values and returns a public/private key pair and their modulus
 generateKeys :: (Integral a) => a -> a -> a -> (a, a, a)
-generateKeys min_p min_q min_e = (d, e, n)
+generateKeys min_p min_q min_e = (d, e, m)
     where p = nextPrime min_p 
           q = nextPrime min_q
           phi = (p - 1) * (q - 1)
-          n = p * q
+          m = p * q
           e = coPrime (nextPrime min_e) phi
           d = modInv e phi
 
--- This is prohibitively slow with larger number as Haskell tries to evaluate
+-- This is prohibitively slow with larger numbers as Haskell tries to evaluate
 -- b ^ e before calculating the remainder. We need to use a more efficient
--- method of modular exponentiation.
+-- method of modular exponentiation (see modExp).
 encrypt :: (Integral a) => a -> a -> a -> a
-encrypt msg key n = (mod (msg^key) n)
+encrypt msg key m = (mod (msg^key) m)
 
 -- encrypts/decrypts message b using public/private key e and modulus m
 -- https://gist.github.com/trevordixon/6788535
