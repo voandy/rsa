@@ -10,10 +10,7 @@ main = do
     let n = read arg
     hClose handle
 
-    putStr "Enter message to encrypt: \n"
-    arg <- getLine
-    let b = read arg
+    let d = crackKey e n
 
-    let c = modExp b e n
-    putStr "The encrypted message is: \n"
-    putStr $ (show c) ++ "\n"
+    putStr "The cracked private is: \n"
+    putStr $ (show d) ++ "\n"

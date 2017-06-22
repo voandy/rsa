@@ -4,4 +4,4 @@ A very basic (and massively insecure) implementation of the RSA cryptosystem I w
 
 ### Cracking the Cryptosystem
 
-To prove how easy it is to crack an RSA cryptosystem using such small keys, I've started work on a function to obtain the private key given the public key and modulus. All we have to do is factorise m into its prime components p and q and we will be able to to re-calculate d using the same process by which it was originally generated.
+To prove how easy it is to crack an RSA cryptosystem using such small keys (11 decimal digits or 36-bit), I also wrote a function to obtain the private key given the public exponent and modulus. All we have to do is factorise n into its prime components p and q and we will be able to to recalculate d using the same process by which it was originally generated.

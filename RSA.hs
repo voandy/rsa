@@ -1,9 +1,11 @@
 module RSA
 ( generateKeys
 , modExp
+, crackKey
 ) where
 
 import Data.Bits
+import Math.NumberTheory.Powers.Squares
 
 -- naive primality test by trial division
 isPrime :: (Integral a) => a -> Bool
@@ -38,27 +40,47 @@ modInv a m = let (i, _, _) = extendedGCD a m in mkPos i
 
 -- increments e until it is coprime with phi
 coPrime :: (Integral a) => a -> a -> a
-coPrime e phi = if euclidGCD e phi == 1 then e else coPrime (nextPrime (e + 1)) phi
+coPrime e phi = if euclidGCD e phi == 1 then e 
+                else coPrime (nextPrime (e + 1)) phi
 
--- takes 3 seed values and returns a public/private key pair and their modulus
+-- takes 3 seed values and returns a public/private key pair and their modulus n
 generateKeys :: (Integral a) => a -> a -> a -> (a, a, a)
-generateKeys min_p min_q min_e = (d, e, m)
-    where p = nextPrime min_p 
+generateKeys min_p min_q min_e = (d, e, n)
+    where d = modInv e phi
+          e = coPrime (nextPrime min_e) phi
+          n = p * q
+          p = nextPrime min_p 
           q = nextPrime min_q
           phi = (p - 1) * (q - 1)
-          m = p * q
-          e = coPrime (nextPrime min_e) phi
-          d = modInv e phi
 
 -- This is prohibitively slow with larger numbers as Haskell tries to evaluate
 -- b ^ e before calculating the remainder. We need to use a more efficient
 -- method of modular exponentiation (see modExp).
 encrypt :: (Integral a) => a -> a -> a -> a
-encrypt msg key m = (mod (msg^key) m)
+encrypt msg key n = (mod (msg^key) n)
 
--- encrypts/decrypts message b using public/private key e and modulus m
+-- same as encrypt by much more efficient
+-- encrypts/decrypts message b using public/private exponent e and modulus n
 -- https://gist.github.com/trevordixon/6788535
 modExp :: Integer -> Integer -> Integer -> Integer
-modExp b 0 m = 1
-modExp b e m = t * modExp ((b * b) `mod` m) (shiftR e 1) m `mod` m
-           where t = if testBit e 0 then b `mod` m else 1
+modExp b 0 n = 1
+modExp b e n = t * modExp ((b * b) `mod` n) (shiftR e 1) n `mod` n
+           where t = if testBit e 0 then b `mod` n else 1
+
+-- given a public exponent e and modulus n, returns the private key d
+crackKey :: (Integral a) => a -> a -> a
+crackKey e n = d
+    where d = modInv e phi
+          (p, q) = fermatFactor n
+          phi = (p - 1) * (q - 1)
+
+-- finds the prime factors p and q of a public modulus n using Fermat's 
+-- factorization method.
+fermatFactor :: (Integral a) => a -> (a, a)
+fermatFactor n = ((a - b), (a + b))
+    where a = fermatA init n
+          init = ceiling.sqrt.fromIntegral $ n
+          b = floor.sqrt.fromIntegral $ a^2 - n
+
+fermatA :: (Integral a) => a -> a -> a
+fermatA a n = if isSquare' (a^2 - n) then a else fermatA (a + 1) n
