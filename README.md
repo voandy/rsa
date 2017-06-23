@@ -8,7 +8,7 @@ To prove how easy it is to crack an RSA cryptosystem using such small keys (11 d
 
 #### Fermat Factorisation
 
-My first attempt used Fermat's factorisation method but it turns out our keys are fairly safe against this since p and p by construction are unlikely to share many leading bits.
+My first attempt used Fermat's factorisation method but it turns out our keys are fairly safe against this since p and q by construction are unlikely to share many leading bits.
 
 https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
 
