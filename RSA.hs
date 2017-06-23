@@ -79,23 +79,23 @@ crackKey e n = d
 -- factorisation method
 fermatFactor :: (Integral a) => a -> (a, a)
 fermatFactor n = ((a - b), (a + b))
-    where a = fermatA init n
+    where a = fermatFactor' init n
           init = ceiling.sqrt.fromIntegral $ n
           b = floor.sqrt.fromIntegral $ a^2 - n
 
-fermatA :: (Integral a) => a -> a -> a
-fermatA a n = if isSquare' (a^2 - n) then a else fermatA (a + 1) n
+fermatFactor' :: (Integral a) => a -> a -> a
+fermatFactor' a n = if isSquare' (a^2 - n) then a else fermatFactor' (a + 1) n
 
 -- finds the prime factors p and q of n using rho factorisation
 rhoFactor :: (Integral a) => a -> (a, a)
 rhoFactor n = (g, div n g)
     where g = gcd n (a2 - a1)
-          (a1, a2) = rhoA (g' a0) (g' (g' a0)) n
+          (a1, a2) = rhoFactor' (g' a0) (g' (g' a0)) n
           g' x = mod (x^2 + c) n
           c = 10
           a0 = 1
 
-rhoA :: (Integral a) => a -> a -> a -> (a, a)
-rhoA a1 a2 n = if gcd n (a2 - a1) /= 1 then (a1, a2) 
-               else rhoA (g' a1) (g' (g' a2)) n
-               where g' x = mod (x^2 + 10) n
+rhoFactor' :: (Integral a) => a -> a -> a -> (a, a)
+rhoFactor' a1 a2 n = if gcd n (a2 - a1) /= 1 then (a1, a2) 
+                     else rhoFactor' (g' a1) (g' (g' a2)) n
+                     where g' x = mod (x^2 + 10) n
