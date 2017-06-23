@@ -31,7 +31,8 @@ euclidGCD a b = if b == 0 then a else euclidGCD b (mod a b)
 extendedGCD :: (Integral a) => a -> a -> (a, a, a)
 extendedGCD a 0 = (1, 0, a)
 extendedGCD a b = let (q, r) = a `quotRem` b
-                      (s, t, g) = extendedGCD b r in (t, s - q * t, g)
+                      (s, t, g) = extendedGCD b r 
+                  in (t, s - q * t, g)
 
 -- modular inverse, assumes a and m are coprime
 modInv :: (Integral a) => a -> a -> a
@@ -71,11 +72,11 @@ modExp b e n = t * modExp ((b * b) `mod` n) (shiftR e 1) n `mod` n
 crackKey :: (Integral a) => a -> a -> a
 crackKey e n = d
     where d = modInv e phi
-          (p, q) = fermatFactor n
+          (p, q) = rhoFactor n
           phi = (p - 1) * (q - 1)
 
--- finds the prime factors p and q of a public modulus n using Fermat's 
--- factorization method.
+-- Finds the prime factors p and q of a public modulus n using Fermat's 
+-- factorisation method
 fermatFactor :: (Integral a) => a -> (a, a)
 fermatFactor n = ((a - b), (a + b))
     where a = fermatA init n
@@ -84,3 +85,17 @@ fermatFactor n = ((a - b), (a + b))
 
 fermatA :: (Integral a) => a -> a -> a
 fermatA a n = if isSquare' (a^2 - n) then a else fermatA (a + 1) n
+
+-- Find the prime factors p and q of n using rho factorisation
+rhoFactor :: (Integral a) => a -> (a, a)
+rhoFactor n = (g, div n g)
+    where g = gcd n (a2 - a1)
+          (a1, a2) = rhoA (g' a0) (g' (g' a0)) n
+          g' x = mod (x^2 + 10) n
+          c = 1
+          a0 = 10
+
+rhoA :: (Integral a) => a -> a -> a -> (a, a)
+rhoA a1 a2 n = if gcd n (a2 - a1) /= 1 then (a1, a2) 
+               else rhoA (g' a1) (g' (g' a2)) n
+               where g' x = mod (x^2 + 10) n

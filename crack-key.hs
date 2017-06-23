@@ -2,13 +2,13 @@ import RSA
 import System.IO
 
 main = do
-    handle <- openFile "id_rsa.pub" ReadMode
-
-    arg <- hGetLine handle
-    let e = read arg
-    arg <- hGetLine handle
+    putStr "Enter public modulus n: \n"
+    arg <- getLine
     let n = read arg
-    hClose handle
+
+    putStr "Enter public exponent e: \n"
+    arg <- getLine
+    let e = read arg
 
     let d = crackKey e n
 
