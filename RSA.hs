@@ -75,7 +75,7 @@ crackKey e n = d
           (p, q) = rhoFactor n
           phi = (p - 1) * (q - 1)
 
--- Finds the prime factors p and q of a public modulus n using Fermat's 
+-- finds the prime factors p and q of a public modulus n using Fermat's 
 -- factorisation method
 fermatFactor :: (Integral a) => a -> (a, a)
 fermatFactor n = ((a - b), (a + b))
@@ -86,7 +86,7 @@ fermatFactor n = ((a - b), (a + b))
 fermatA :: (Integral a) => a -> a -> a
 fermatA a n = if isSquare' (a^2 - n) then a else fermatA (a + 1) n
 
--- Find the prime factors p and q of n using rho factorisation
+-- finds the prime factors p and q of n using rho factorisation
 rhoFactor :: (Integral a) => a -> (a, a)
 rhoFactor n = (g, div n g)
     where g = gcd n (a2 - a1)
