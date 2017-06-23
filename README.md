@@ -14,9 +14,9 @@ https://en.wikipedia.org/wiki/Fermat%27s_factorization_method
 
 #### Pollard's rho algorithm
 
-The rho method of factorisation is much more efficient taking roughly only 3 seconds on average to factorise our 36-bit public modulus on my i5 laptop. The rho algorithm only takes on average sqrt(p) operations to find p. This is roughly 10^5 operations in the case of our keys so very doable on any modern computer. 
+The rho method of factorisation is much more efficient taking roughly only 3 seconds on average to factorise our 36-bit public modulus on my i5 laptop. The rho algorithm takes on average sqrt(p) operations to find p. This is roughly 10^5 operations in the case of our keys so very doable on any modern computer. 
 
-In the case of a 2048-bit (the current industry standard) it would take, by my rough calculations, 10^154 operations so it's fair to say that they are safe against rho factorisation even on the most powerful supercomputers.
+In the case of a 2048-bit key (the current industry standard) it would take, by my rough calculations, 10^154 operations so it's fair to say that they are safe against rho factorisation even on the most powerful supercomputers.
 
 http://facthacks.cr.yp.to/rho.html
 
