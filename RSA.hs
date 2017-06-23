@@ -91,9 +91,9 @@ rhoFactor :: (Integral a) => a -> (a, a)
 rhoFactor n = (g, div n g)
     where g = gcd n (a2 - a1)
           (a1, a2) = rhoA (g' a0) (g' (g' a0)) n
-          g' x = mod (x^2 + a0) n
-          c = 1
-          a0 = 10
+          g' x = mod (x^2 + c) n
+          c = 10
+          a0 = 1
 
 rhoA :: (Integral a) => a -> a -> a -> (a, a)
 rhoA a1 a2 n = if gcd n (a2 - a1) /= 1 then (a1, a2) 
